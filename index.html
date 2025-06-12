@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GDD Interactivo: Café Carpincho</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF5; /* Warm neutral background */
+            color: #4A4A4A;
+        }
+        .title-font {
+            font-family: 'Fredoka One', cursive;
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .nav-link {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .nav-link.active {
+            color: #D97706; /* Amber-600 */
+            border-left-color: #D97706;
+            background-color: #FEF3C7; /* Amber-100 */
+        }
+        .nav-link:hover {
+            color: #D97706;
+            background-color: #FEF3C7;
+        }
+        h2 {
+            border-bottom: 2px solid #F3EADD;
+            padding-bottom: 0.5rem;
+        }
+        .tag {
+            background-color: #FEF3C7;
+            color: #B45309;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            max-height: 50vh;
+        }
+        .level-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body class="flex">
+
+    <!-- NAVEGACIÓN LATERAL FIJA -->
+    <aside class="sticky top-0 h-screen w-64 bg-white shadow-lg hidden lg:block">
+        <div class="p-6">
+            <h1 class="title-font text-2xl text-[#A98D71]">Café Carpincho</h1>
+            <p class="text-sm text-gray-500">GDD Interactivo v2.1</p>
+        </div>
+        <nav id="desktop-nav" class="mt-4">
+            <a href="#overview" class="nav-link block py-3 px-6 text-gray-600 font-semibold">Visión General</a>
+            <a href="#core-loop" class="nav-link block py-3 px-6 text-gray-600 font-semibold">Bucle de Juego</a>
+            <a href="#mechanics" class="nav-link block py-3 px-6 text-gray-600 font-semibold">Mecánicas</a>
+            <a href="#progression" class="nav-link block py-3 px-6 text-gray-600 font-semibold">Progresión y Niveles</a>
+            <a href="#events" class="nav-link block py-3 px-6 text-gray-600 font-semibold">Eventos Especiales</a>
+            <a href="#economy" class="nav-link block py-3 px-6 text-gray-600 font-semibold">Economía y Tienda</a>
+            <a href="#future" class="nav-link block py-3 px-6 text-gray-600 font-semibold">Posibles Expansiones</a>
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="w-full lg:w-[calc(100%-16rem)] p-4 md:p-8 lg:p-12 overflow-y-auto">
+        
+        <section id="overview" class="mb-16">
+            <h2 class="title-font text-3xl md:text-4xl text-gray-800 mb-4">Visión General del Juego</h2>
+            <div class="card p-6 md:p-8">
+                <p class="text-lg leading-relaxed">
+                    <strong>Café Carpincho</strong> es un juego de gestión de tiempo de estilo arcade. El jugador asume el rol de un carpincho que debe atender a una clientela de animales sirviendo pedidos en un café del bosque. El objetivo es progresar a través de <strong>100 niveles</strong> de dificultad creciente, dominar una amplia variedad de ingredientes, ganar monedas y utilizar mejoras estratégicas para superar los desafíos, todo envuelto en una estética encantadora y diseñado para móviles.
+                </p>
+            </div>
+        </section>
+
+        <section id="core-loop" class="mb-16">
+            <h2 class="title-font text-3xl md:text-4xl text-gray-800 mb-4">Bucle de Juego Principal</h2>
+            <div class="card p-6 md:p-8">
+                <p class="mb-6">El ciclo de juego fundamental se centra en atender clientes de la forma más eficiente posible. Este diagrama ilustra el flujo de acciones que el jugador repite constantemente.</p>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-center flex-wrap">
+                    <div class="p-4 rounded-lg bg-amber-50">Llega Cliente</div>
+                    <div class="text-2xl text-amber-500">→</div>
+                    <div class="p-4 rounded-lg bg-amber-50">Prepara Pedido</div>
+                    <div class="text-2xl text-amber-500">→</div>
+                    <div class="p-4 rounded-lg bg-amber-50">Sirve Plato</div>
+                    <div class="text-2xl text-amber-500">→</div>
+                    <div class="p-4 rounded-lg bg-green-50 text-green-800">Éxito</div>
+                    <div class="text-xl text-gray-400 mx-2">o</div>
+                    <div class="p-4 rounded-lg bg-red-50 text-red-800">Error</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanics" class="mb-16">
+            <h2 class="title-font text-3xl md:text-4xl text-gray-800 mb-4">Mecánicas Principales</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2 flex items-center"><span class="text-3xl mr-3">🍽️</span>Pedidos y Entrega</h3>
+                    <p class="text-gray-600">El jugador debe preparar los pedidos en 3 platos fijos, cada uno alineado con una posición de cliente. El servicio es dirigido, obligando a una correcta organización.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2 flex items-center"><span class="text-3xl mr-3">🔪</span>Procesamiento</h3>
+                    <p class="text-gray-600">Algunos ingredientes requieren un paso extra. El jugador debe usar estaciones (tabla de cortar, exprimidor) para transformar ingredientes base en procesados.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2 flex items-center"><span class="text-3xl mr-3">😠</span>Paciencia y Errores</h3>
+                    <p class="text-gray-600">Cada cliente tiene una barra de paciencia. Los errores al servir o la falta de paciencia agotan el tiempo del nivel y rompen las rachas de combos.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2 flex items-center"><span class="text-3xl mr-3">🔥</span>Sistema de Rachas</h3>
+                    <p class="text-gray-600">Servir platos correctos de forma consecutiva activa una racha que otorga monedas extra. Se rompe con el primer error o si se tarda demasiado.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="progression" class="mb-16">
+            <h2 class="title-font text-3xl md:text-4xl text-gray-800 mb-4">Progresión y Niveles</h2>
+            <div class="card p-6 md:p-8">
+                <p class="mb-6 leading-relaxed">La progresión a lo largo de los 100 niveles está diseñada para ser gradual y justa. Se divide en tres fases principales:</p>
+                <ul class="list-disc list-inside mb-6 space-y-2">
+                    <li><strong>Niveles 1-20 (Introducción):</strong> El jugador aprende las mecánicas básicas. Se introducen los primeros ingredientes y las estaciones de procesamiento (cuchillo y exprimidor) de forma separada.</li>
+                    <li><strong>Niveles 21-70 (Desarrollo):</strong> Se añaden nuevos ingredientes cada 5 niveles, forzando al jugador a adaptarse. Los pedidos se vuelven más largos y los eventos especiales son más comunes.</li>
+                    <li><strong>Niveles 71-100 (Maestría):</strong> El jugador debe dominar todos los ingredientes y mecánicas. El tiempo es muy limitado y los pedidos son complejos, requiriendo máxima eficiencia.</li>
+                </ul>
+
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-2">Explorador de Niveles</h3>
+                    <div id="level-selector" class="level-selector-grid">
+                        <!-- Los botones de los niveles se generarán aquí -->
+                    </div>
+                </div>
+
+                <div id="level-details" class="bg-amber-50 p-6 rounded-lg transition-all duration-300">
+                    <!-- Los detalles del nivel seleccionado se mostrarán aquí -->
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="font-bold text-lg mb-2">Curva de Dificultad (Tiempo vs. Objetivo)</h3>
+                    <div class="chart-container">
+                        <canvas id="difficultyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="events" class="mb-16">
+            <h2 class="title-font text-3xl md:text-4xl text-gray-800 mb-4">Eventos Especiales</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card p-6 border-l-4 border-amber-500">
+                    <h3 class="font-bold text-xl mb-2">¡Hora Pico!</h3>
+                    <p class="text-gray-600">Un evento aleatorio de 15 segundos donde los clientes llegan más rápido. Una prueba de velocidad y eficiencia para el jugador.</p>
+                </div>
+                <div class="card p-6 border-l-4 border-purple-500">
+                    <h3 class="font-bold text-xl mb-2">Cliente VIP 👑</h3>
+                    <p class="text-gray-600">Un cliente especial que aparece una vez por nivel. Tiene un pedido complejo y poca paciencia, pero otorga una gran cantidad de monedas.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="economy" class="mb-16">
+            <h2 class="title-font text-3xl md:text-4xl text-gray-800 mb-4">Economía y Tienda</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2">Carpin-Monedas 🪙</h3>
+                    <p class="text-gray-600">La moneda del juego. Se gana al completar pedidos y obtener bonificaciones por racha. Sirve para comprar mejoras en la tienda.</p>
+                </div>
+                 <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2">Mejoras Temporales</h3>
+                    <p class="text-gray-600">En la tienda, accesible entre niveles, el jugador puede comprar mejoras como "Zapatillas Rápidas" (+5s de tiempo) o "Café de Calidad" (+10% de paciencia).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NUEVA SECCIÓN: POSIBLES EXPANSIONES -->
+        <section id="future" class="mb-16">
+            <h2 class="title-font text-3xl md:text-4xl text-gray-800 mb-4">Posibles Expansiones Futuras</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2">Recetas Combinadas</h3>
+                    <p class="text-gray-600">Introducir pedidos que requieran múltiples ingredientes procesados, como una "Ensalada de Frutas" (🍓+🥝+🥭) o "Salsas" (🍅+🧅+🌶️).</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2">Nuevas Estaciones</h3>
+                    <p class="text-gray-600">Añadir una <strong>Licuadora</strong> para batidos (🥥+🥭) o un <strong>Horno</strong> para tartas (🍒+🍓), introduciendo nuevas mecánicas de preparación y tiempo.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-xl mb-2">Mejoras Permanentes</h3>
+                    <p class="text-gray-600">Expandir la tienda para permitir mejoras permanentes, como "Platos más rápidos", "Aumento de propinas" o "Paciencia base mejorada" a cambio de un alto coste en monedas.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ALL_INGREDIENTS = ['🍓', '🥬', '🥕', '🌽', '🍉', '🌶️', '🍊', '🥑', '🍅', '🍄', '🍍', '🥥', '🥝', '🥭', '🍑', '🍒', '🫐', '🍈', '🍐', '🥦', '🥒', '🧅'];
+            
+            function generateLevels() {
+                const levels = [];
+                const baseIngredients = ['🍓', '🥬', '🥕'];
+                let currentIngredients = [...baseIngredients];
+                let availableActions = [];
+
+                for (let i = 1; i <= 100; i++) {
+                    const level = {
+                        level: i,
+                        goal: Math.floor(5 * Math.pow(1.04, i)),
+                        time: Math.max(45, Math.floor(120 * Math.pow(0.985, i))),
+                        patience: Math.max(50, Math.floor(100 * Math.pow(0.995, i))),
+                        maxOrderSize: Math.min(6, Math.floor(1 + i / 8)),
+                        ingredients: [],
+                        actions: [],
+                        events: []
+                    };
+                    
+                    if (i === 5) availableActions.push('chop');
+                    if (i === 10) availableActions.push('juice');
+                    if (i > 2 && i % 5 === 0 && ALL_INGREDIENTS.length > currentIngredients.length) {
+                         const newIngredient = ALL_INGREDIENTS[currentIngredients.length];
+                         if (newIngredient) currentIngredients.push(newIngredient);
+                    }
+                    
+                    level.ingredients = [...currentIngredients];
+                    level.actions = [...availableActions];
+
+                    if (i > 3) level.events.push('VIP');
+                    if (i > 6) level.events.push('Hora Pico');
+                    
+                    levels.push(level);
+                }
+                return levels;
+            }
+
+            const GDD_DATA = { levels: generateLevels() };
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+            sections.forEach(section => observer.observe(section));
+
+            const levelSelector = document.getElementById('level-selector');
+            const levelDetails = document.getElementById('level-details');
+
+            GDD_DATA.levels.forEach(level => {
+                const button = document.createElement('button');
+                button.className = 'px-3 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-amber-100 hover:border-amber-400 transition';
+                button.textContent = `${level.level}`;
+                button.addEventListener('click', () => {
+                    displayLevelDetails(level);
+                    document.querySelectorAll('#level-selector button').forEach(btn => btn.classList.remove('bg-amber-200', 'border-amber-500'));
+                    button.classList.add('bg-amber-200', 'border-amber-500');
+                });
+                levelSelector.appendChild(button);
+            });
+
+            function displayLevelDetails(level) {
+                let allItems = [...level.ingredients, ...level.actions.map(a => a === 'chop' ? '🔪' : '🧃')];
+                let itemsHtml = allItems.map(item => `<span class="tag">${item}</span>`).join(' ');
+                let eventsHtml = level.events.length > 0 
+                    ? level.events.map(evt => `<span class="tag">${evt}</span>`).join(' ')
+                    : '<span class="text-gray-500">Ninguno</span>';
+
+                levelDetails.innerHTML = `
+                    <h4 class="title-font text-2xl mb-3 text-amber-800">Nivel ${level.level}</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+                        <div><p class="text-sm text-gray-500">Objetivo</p><p class="font-bold text-2xl">${level.goal} <span class="text-lg">clientes</span></p></div>
+                        <div><p class="text-sm text-gray-500">Tiempo</p><p class="font-bold text-2xl">${level.time}s</p></div>
+                        <div><p class="text-sm text-gray-500">Paciencia Base</p><p class="font-bold text-2xl">${level.patience}%</p></div>
+                    </div>
+                    <div class="mt-4"><p class="font-semibold mb-2">Ingredientes y Acciones:</p><div class="flex flex-wrap gap-2">${itemsHtml}</div></div>
+                    <div class="mt-4"><p class="font-semibold mb-2">Eventos Posibles:</p><div class="flex flex-wrap gap-2">${eventsHtml}</div></div>`;
+            }
+
+            document.querySelector('#level-selector button').click();
+            
+            const ctx = document.getElementById('difficultyChart').getContext('2d');
+            const chartData = {
+                labels: GDD_DATA.levels.map(l => `N${l.level}`),
+                datasets: [
+                    {
+                        label: 'Clientes (Objetivo)',
+                        data: GDD_DATA.levels.map(l => l.goal),
+                        borderColor: '#D97706',
+                        backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                        yAxisID: 'y',
+                        fill: true,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Tiempo (Segundos)',
+                        data: GDD_DATA.levels.map(l => l.time),
+                        borderColor: '#4B5563',
+                        backgroundColor: 'rgba(75, 85, 99, 0.1)',
+                        yAxisID: 'y1',
+                        fill: false,
+                        tension: 0.3,
+                        borderDash: [5, 5]
+                    }
+                ]
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: { ticks: { autoSkip: true, maxTicksLimit: 20 } },
+                        y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Clientes' } },
+                        y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'Segundos' }, grid: { drawOnChartArea: false } },
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
